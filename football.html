@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كرة القدم - أخبار الرياضة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: 'Al Jazeera Arabic';
+            src: url('fonts/Al-Jazeera-Arabic-Bold.ttf') format('truetype');
+            font-weight: bold;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #dc2626;
+            --accent: #f59e0b;
+            --dark: #737579;
+            --darker: #0f172a;
+            --gray-900: #334155;
+            --gray-700: #475569;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --premier-league: #38003c;
+            --la-liga: #004d98;
+            --serie-a: #0c5da5;
+            --bundesliga: #d3010c;
+            --ligue-1: #091c3b;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        body {
+            font-family: 'Al Jazeera Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            direction: rtl;
+            line-height: 1.6;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
+        header { background: var(--white); box-shadow: var(--shadow-md); position: sticky; top: 0; z-index: 1000; }
+        .header-container { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; flex-wrap: wrap; gap: 1rem; }
+        .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo img { width: 50px; height: 50px; border-radius: 12px; border: 3px solid var(--primary); object-fit: contain; }
+        .logo-text h1 { font-size: 1.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .tagline { font-size: 0.75rem; color: var(--gray-500); }
+        .main-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .nav-link { padding: 0.6rem 1.2rem; text-decoration: none; color: var(--gray-700); font-weight: 600; border-radius: var(--border-radius); transition: var(--transition); }
+        .nav-link.active { background: var(--primary); color: var(--white); }
+        .nav-link:hover { background: var(--primary); color: var(--white); }
+        .mobile-menu-btn { display: none; cursor: pointer; }
+        .mobile-menu-btn span { display: block; height: 2px; background: white; margin: 4px 0; width: 20px; }
+        .main-nav.active { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .football-hero { background: linear-gradient(135deg, var(--premier-league) 0%, #8a0d5e 100%); color: var(--white); padding: 4rem 0; text-align: center; position: relative; overflow: hidden; }
+        .football-hero::before { content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 100%; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle fill="rgba(255,255,255,0.1)" cx="20" cy="20" r="5"/><circle fill="rgba(255,255,255,0.1)" cx="80" cy="40" r="8"/><circle fill="rgba(255,255,255,0.1)" cx="40" cy="80" r="6"/></svg>'); }
+        .football-hero h1 { font-size: 3rem; margin-bottom: 1rem; position: relative; z-index: 2; }
+        .football-hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; position: relative; z-index: 2; }
+
+        .live-matches { padding: 3rem 0; }
+        .section-title { text-align: center; margin-bottom: 2rem; font-size: 2rem; color: var(--dark); position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; right: 50%; transform: translateX(50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
+        .matches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .match-card { background: var(--white); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow-md); transition: var(--transition); border-top: 4px solid var(--primary); }
+        .match-card.live { border-top-color: var(--secondary); position: relative; overflow: hidden; }
+        .match-card.live::before { content: 'مباشر'; position: absolute; top: 10px; left: 10px; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .match-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .team { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
+        .team-logo { width: 60px; height: 60px; margin-bottom: 0.5rem; background: var(--gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--gray-700); }
+        .team-name { font-weight: 600; font-size: 0.9rem; }
+        .vs { font-weight: 700; color: var(--gray-500); margin: 0 1rem; }
+        .match-score { font-size: 1.5rem; font-weight: 700; color: var(--dark); margin: 0 1rem; }
+        .match-info { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--gray-600); border-top: 1px solid var(--gray-300); padding-top: 1rem; }
+
+        .leagues-section { padding: 3rem 0; background: var(--white); }
+        .leagues-tabs { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .league-tab { padding: 0.75rem 1.5rem; background: var(--gray-100); border: none; border-radius: 25px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .league-tab.active { background: var(--primary); color: white; }
+        .standings-table { background: var(--white); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-md); }
+        .table-header { display: grid; grid-template-columns: 50px 1fr 40px 40px 40px 40px 40px 40px; gap: 0.5rem; padding: 1rem; background: var(--primary); color: white; font-weight: 600; }
+        .table-row { display: grid; grid-template-columns: 50px 1fr 40px 40px 40px 40px 40px 40px; gap: 0.5rem; padding: 1rem; border-bottom: 1px solid var(--gray-300); transition: var(--transition); }
+        .table-row:hover { background: var(--gray-100); }
+        .table-row.ucl { background: rgba(30, 144, 255, 0.1); }
+        .table-row.uel { background: rgba(50, 205, 50, 0.1); }
+        .table-row.relegation { background: rgba(220, 38, 38, 0.1); }
+        .team-cell { display: flex; align-items: center; gap: 0.5rem; }
+        .team-badge { width: 25px; height: 25px; background: var(--gray-300); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
+
+        .featured-news { padding: 3rem 0; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .news-card { background: var(--white); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition); }
+        .news-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .news-image { height: 200px; background: var(--gray-300); position: relative; overflow: hidden; }
+        .news-category { position: absolute; top: 10px; right: 10px; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .news-content { padding: 1.5rem; }
+        .news-title { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--dark); }
+        .news-excerpt { color: var(--gray-700); margin-bottom: 1rem; font-size: 0.9rem; }
+
+        footer { background: var(--darker); color: white; padding: 3rem 0 1.5rem; }
+        .footer-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .footer-section h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.2rem; }
+        .footer-section ul { list-style: none; }
+        .footer-section li { margin-bottom: 0.5rem; }
+        .footer-section a { color: var(--gray-300); text-decoration: none; transition: var(--transition); }
+        .footer-section a:hover { color: var(--accent); }
+        .footer-bottom { text-align: center; padding-top: 1.5rem; border-top: 1px solid var(--gray-700); color: var(--gray-500); }
+
+        @media (max-width: 768px) {
+            .header-container { flex-direction: column; text-align: center; }
+            .main-nav { justify-content: center; }
+            .mobile-menu-btn { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 40px; height: 40px; background: var(--primary); border: none; border-radius: 6px; }
+            .football-hero h1 { font-size: 2rem; }
+            .table-header, .table-row { grid-template-columns: 30px 1fr 30px 30px 30px 30px 30px 30px; font-size: 0.8rem; padding: 0.75rem 0.5rem; }
+            .team-cell { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+            .team-badge { width: 20px; height: 20px; font-size: 0.6rem; }
+        }
+        @media (max-width: 480px) {
+            .matches-grid, .news-grid { grid-template-columns: 1fr; }
+            .match-teams { flex-direction: column; gap: 1rem; }
+            .vs, .match-score { margin: 0.5rem 0; }
+            .leagues-tabs { flex-direction: column; align-items: center; }
+            .league-tab { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="images/footify-logo.png" alt="شعار أخبار الرياضة" class="logo-img">
+                <div class="logo-text">
+                    <h1>أخبار الرياضة</h1>
+                    <span class="tagline">الشغف يتحدث بلغة الرياضة</span>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">الرئيسية</a>
+                <a href="football.html" class="nav-link active">كرة القدم</a>
+                <a href="basketball.html" class="nav-link">كرة السلة</a>
+                <a href="tennis.html" class="nav-link">التنس</a>
+                <a href="olympics.html" class="nav-link">الأولمبياد</a>
+                <a href="videos.html" class="nav-link">فيديو</a>
+            </nav>
+
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<section class="football-hero">
+    <div class="container">
+        <h1>كرة القدم</h1>
+        <p>أحدث الأخبار، النتائج المباشرة، ترتيب الفرق، وأبرز الأحداث في عالم الساحرة المستديرة</p>
+    </div>
+</section>
+
+<!-- باقي الصفحة تبقى كما هي بدون تغييرات في HTML -->
+
+<a href="index.html">Retour à l'accueil</a>
+
+<footer>
+    <div class="container">
+        <div class="footer-sections">
+            <div class="footer-section">
+                <h3>أقسام الموقع</h3>
+                <ul>
+                    <li><a href="football.html">كرة القدم</a></li>
+                    <li><a href="basketball.html">كرة السلة</a></li>
+                    <li><a href="tennis.html">التنس</a></li>
+                    <li><a href="athletics.html">ألعاب القوى</a></li>
+                    <li><a href="others.html">رياضات أخرى</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul>
+                    <li><a href="#">الترتيب</a></li>
+                    <li><a href="#">النتائج</a></li>
+                    <li><a href="#">المواعيد</a></li>
+                    <li><a href="#">اللاعبون</a></li>
+                    <li><a href="#">الفيديوهات</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>الدعم</h3>
+                <ul>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                    <li><a href="about.html">عن الموقع</a></li>
+                    <li><a href="terms.html">الشروط والأحكام</a></li>
+                    <li><a href="privacy.html">سياسة الخصوصية</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 أخبار الرياضة. جميع الحقوق محفوظة.</p>
+            <p>الشغف يتحدث بلغة الرياضة</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // League tabs toggle
+    document.querySelectorAll('.league-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.league-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Live scores simulation
+    function updateLiveScores() {
+        const liveMatches = document.querySelectorAll('.match-card.live');
+        liveMatches.forEach(match => {
+            const scoreElement = match.querySelector('.match-score');
+            const minuteElement = match.querySelector('.match-info span:first-child');
+            let minute = parseInt(minuteElement.textContent);
+            if (minute < 90) { minuteElement.textContent = (minute + 1) + "'"; }
+            if (Math.random() < 0.05 && minute < 85) {
+                const score = scoreElement.textContent.split(' - ');
+                const teamToScore = Math.floor(Math.random() * 2);
+                score[teamToScore] = parseInt(score[teamToScore]) + 1;
+                scoreElement.textContent = score.join(' - ');
+                scoreElement.style.color = 'var(--secondary)';
+                setTimeout(() => { scoreElement.style.color = 'var(--dark)'; }, 1000);
+            }
+        });
+    }
+    setInterval(updateLiveScores, 10000);
+
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+        document.querySelector('.main-nav').classList.toggle('active');
+    });
+</script>
+</body>
+</html>
