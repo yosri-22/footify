@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            direction: rtl;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            text-align: right;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+        }
+
+        .icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a href="#" class="logo">
+                    <img src="images/footify-logo.png" alt="شعار أخبار الرياضة" class="logo-img">
+                    <div class="logo-text">
+                    </div>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="قائمة الجوال">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <a href="index.html" class="home-btn" title="العودة للرئيسية">
+                    <i class="fas fa-home"></i>
+                </a>
+
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">الرئيسية</a>
+                    <a href="football.html" class="nav-link">كرة القدم</a>
+                    <a href="basketball.html" class="nav-link">كرة السلة</a>
+                    <a href="tennis.html" class="nav-link">التنس</a>
+                    <a href="olympics.html" class="nav-link">الأولمبياد</a>
+                    <a href="videos.html" class="nav-link">فيديو</a>
+                    <a href="about.html" class="nav-link">حولنا</a>
+                    <a href="contact.html" class="nav-link">اتصل بنا</a>
+                    <a href="terms.html" class="nav-link">الشروط</a>
+                    <a href="register.html" class="nav-link"><i class="fas fa-user-plus"></i> إنشاء حساب</a>
+                    <a href="login.html" class="nav-link active"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
+                </nav>
+
+                <div class="header-actions">
+                    <form class="search-bar">
+                        <input type="text" placeholder="ابحث عن أخبار..." aria-label="بحث">
+                        <button type="submit">بحث</button>
+                    </form>
+
+                    <div class="social-icons">
+                        <a href="https://facebook.com" class="facebook" aria-label="فيسبوك">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com" class="twitter" aria-label="تويتر">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com" class="instagram" aria-label="إنستجرام">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com" class="youtube" aria-label="يوتيوب">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-lock icon"></i>
+            <h1>تسجيل الدخول</h1>
+            <p>أدخل بياناتك للوصول إلى لوحة التحكم</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> دخول
+            </button>
+        </form>
+
+        <div id="errorMessage" class="error-message">
+            اسم المستخدم أو كلمة المرور غير صحيحة
+        </div>
+
+        <div class="links">
+            <a href="register.html">
+                <i class="fas fa-user-plus"></i> إنشاء حساب
+            </a>
+            <a href="index.html">
+                <i class="fas fa-home"></i> الرئيسية
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Check admin
+            if (username === 'superdmin' && password === 'password') {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Check registered users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === username && u.password === password);
+
+            if (user) {
+                // For demo, just redirect to index or show logged in
+                alert('تم تسجيل الدخول بنجاح! مرحباً ' + user.name);
+                window.location.href = 'index.html';
+            } else {
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

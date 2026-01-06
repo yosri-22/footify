@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Control Site</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .section { margin-bottom: 40px; border: 1px solid #ddd; padding: 20px; }
+        .item { border-bottom: 1px solid #eee; padding: 10px; }
+        .form { margin-top: 20px; }
+        .form input, .form textarea { width: 100%; margin-bottom: 10px; padding: 8px; }
+        .form button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .delete { color: red; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a href="#" class="logo">
+                    <img src="images/footify-logo.png" alt="شعار أخبار الرياضة" class="logo-img">
+                    <div class="logo-text">
+                    </div>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="قائمة الجوال">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <a href="index.html" class="home-btn" title="العودة للرئيسية">
+                    <i class="fas fa-home"></i>
+                </a>
+
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">الرئيسية</a>
+                    <a href="football.html" class="nav-link">كرة القدم</a>
+                    <a href="basketball.html" class="nav-link">كرة السلة</a>
+                    <a href="tennis.html" class="nav-link">التنس</a>
+                    <a href="olympics.html" class="nav-link">الأولمبياد</a>
+                    <a href="videos.html" class="nav-link">فيديو</a>
+                    <a href="about.html" class="nav-link">حولنا</a>
+                    <a href="contact.html" class="nav-link">اتصل بنا</a>
+                    <a href="terms.html" class="nav-link">الشروط</a>
+                    <a href="register.html" class="nav-link"><i class="fas fa-user-plus"></i> إنشاء حساب</a>
+                    <a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
+                </nav>
+
+                <div class="header-actions">
+                    <form class="search-bar">
+                        <input type="text" placeholder="ابحث عن أخبار..." aria-label="بحث">
+                        <button type="submit">بحث</button>
+                    </form>
+
+                    <div class="social-icons">
+                        <a href="https://facebook.com" class="facebook" aria-label="فيسبوك">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com" class="twitter" aria-label="تويتر">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com" class="instagram" aria-label="إنستجرام">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com" class="youtube" aria-label="يوتيوب">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard">
+        <h1>Dashboard to Control Site</h1>
+
+        <div class="section">
+            <h2>Articles</h2>
+            <div id="articles-list"></div>
+            <div class="form">
+                <input type="text" id="article-title" placeholder="Title">
+                <textarea id="article-desc" placeholder="Description"></textarea>
+                <input type="text" id="article-url" placeholder="URL">
+                <input type="text" id="article-image" placeholder="Image URL">
+                <button onclick="addItem('articles')">Add Article</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Matches</h2>
+            <div id="matches-list"></div>
+            <div class="form">
+                <input type="text" id="match-team1" placeholder="Team 1">
+                <input type="text" id="match-team2" placeholder="Team 2">
+                <input type="text" id="match-score" placeholder="Score">
+                <input type="text" id="match-time" placeholder="Time">
+                <button onclick="addItem('matches')">Add Match</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Trending</h2>
+            <div id="trending-list"></div>
+            <div class="form">
+                <input type="text" id="trending-title" placeholder="Title">
+                <textarea id="trending-desc" placeholder="Description"></textarea>
+                <input type="text" id="trending-url" placeholder="URL">
+                <button onclick="addItem('trending')">Add Trending</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Breaking News</h2>
+            <div id="breaking-list"></div>
+            <div class="form">
+                <input type="text" id="breaking-title" placeholder="Title">
+                <textarea id="breaking-desc" placeholder="Description"></textarea>
+                <input type="text" id="breaking-url" placeholder="URL">
+                <button onclick="addItem('breaking')">Add Breaking</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Videos</h2>
+            <div id="videos-list"></div>
+            <div class="form">
+                <input type="text" id="video-title" placeholder="Title">
+                <input type="text" id="video-url" placeholder="URL">
+                <button onclick="addItem('videos')">Add Video</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const types = ['articles', 'matches', 'trending', 'breaking', 'videos'];
+
+        function loadData() {
+            types.forEach(type => {
+                fetch(`/api/manual/${type}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const list = document.getElementById(`${type}-list`);
+                        list.innerHTML = data.map((item, index) => `
+                            <div class="item">
+                                ${JSON.stringify(item)}
+                                <span class="delete" onclick="deleteItem('${type}', ${index})">Delete</span>
+                            </div>
+                        `).join('');
+                    });
+            });
+        }
+
+        function addItem(type) {
+            const data = getFormData(type);
+            fetch(`/api/manual/${type}`)
+                .then(res => res.json())
+                .then(current => {
+                    current.push(data);
+                    return fetch(`/api/manual/${type}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(current)
+                    });
+                })
+                .then(() => loadData());
+        }
+
+        function deleteItem(type, index) {
+            fetch(`/api/manual/${type}`)
+                .then(res => res.json())
+                .then(current => {
+                    current.splice(index, 1);
+                    return fetch(`/api/manual/${type}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(current)
+                    });
+                })
+                .then(() => loadData());
+        }
+
+        function getFormData(type) {
+            if (type === 'articles') {
+                return {
+                    title: document.getElementById('article-title').value,
+                    description: document.getElementById('article-desc').value,
+                    url: document.getElementById('article-url').value,
+                    urlToImage: document.getElementById('article-image').value
+                };
+            } else if (type === 'matches') {
+                return {
+                    team1: document.getElementById('match-team1').value,
+                    team2: document.getElementById('match-team2').value,
+                    score: document.getElementById('match-score').value,
+                    time: document.getElementById('match-time').value
+                };
+            } else if (type === 'trending') {
+                return {
+                    title: document.getElementById('trending-title').value,
+                    description: document.getElementById('trending-desc').value,
+                    url: document.getElementById('trending-url').value
+                };
+            } else if (type === 'breaking') {
+                return {
+                    title: document.getElementById('breaking-title').value,
+                    description: document.getElementById('breaking-desc').value,
+                    url: document.getElementById('breaking-url').value
+                };
+            } else if (type === 'videos') {
+                return {
+                    title: document.getElementById('video-title').value,
+                    url: document.getElementById('video-url').value
+                };
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

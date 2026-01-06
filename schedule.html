@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>المواعيد - أخبار الرياضة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <a href="#" class="logo">
+                    <img src="images/footify-logo.png" alt="شعار أخبار الرياضة" class="logo-img">
+                    <div class="logo-text">
+                    </div>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="قائمة الجوال">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <a href="index.html" class="home-btn" title="العودة للرئيسية">
+                    <i class="fas fa-home"></i>
+                </a>
+
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link">الرئيسية</a>
+                    <a href="football.html" class="nav-link">كرة القدم</a>
+                    <a href="basketball.html" class="nav-link">كرة السلة</a>
+                    <a href="tennis.html" class="nav-link">التنس</a>
+                    <a href="olympics.html" class="nav-link">الأولمبياد</a>
+                    <a href="videos.html" class="nav-link">فيديو</a>
+                    <a href="about.html" class="nav-link">حولنا</a>
+                    <a href="contact.html" class="nav-link">اتصل بنا</a>
+                    <a href="terms.html" class="nav-link">الشروط</a>
+                    <a href="register.html" class="nav-link"><i class="fas fa-user-plus"></i> إنشاء حساب</a>
+                    <a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
+                </nav>
+
+                <div class="header-actions">
+                    <form class="search-bar">
+                        <input type="text" placeholder="ابحث عن أخبار..." aria-label="بحث">
+                        <button type="submit">بحث</button>
+                    </form>
+
+                    <div class="social-icons">
+                        <a href="https://facebook.com" class="facebook" aria-label="فيسبوك">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com" class="twitter" aria-label="تويتر">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com" class="instagram" aria-label="إنستجرام">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com" class="youtube" aria-label="يوتيوب">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-container">
+        <section class="widget">
+            <h2 class="section-title">المواعيد - الأخبار</h2>
+            <p>هنا تُعرض نتائج الأخبار والمواعيد المزوّدة من الـ API.</p>
+
+            <div class="widget" id="articles-widget">
+                <div id="articles-list" class="main-news">
+                    <div class="loading">جاري التحميل...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 أخبار الرياضة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/realtime-client.js"></script>
+    <script>
+        // Fetch articles from proxy (/api/articles) and render as cards
+        async function loadArticles() {
+            const container = document.getElementById('articles-list');
+            try {
+                const res = await fetch('/api/articles');
+                if (!res.ok) throw new Error('شبكة: ' + res.status);
+                const data = await res.json();
+                const articles = Array.isArray(data) ? data : (data && data.articles) ? data.articles : [];
+                if (!articles || articles.length === 0) {
+                    container.innerHTML = '<div class="empty">لا توجد مقالات حالياً</div>';
+                    return;
+                }
+
+                const escapeHtml = (s) => s == null ? '' : String(s).replace(/[&"'<>]/g, c => ({'&':'&amp;','"':'&quot;',"'":'&#39;','<':'&lt;','>':'&gt;'}[c]));
+
+                container.innerHTML = articles.slice(0,20).map(a => {
+                    const title = escapeHtml(a.title || a.headline || '');
+                    const desc = escapeHtml((a.description || a.summary || a.content || '').substring(0,200));
+                    const url = escapeHtml(a.url || a.link || '#');
+                    const img = escapeHtml(a.image || a.imageUrl || a.thumbnail || '');
+                    const date = escapeHtml(a.publishedAt || a.date || '');
+
+                    return `
+                        <article class="news-card">
+                            ${img ? `<img src="${img}" alt="${title}" class="news-image">` : ''}
+                            <div class="card-content">
+                                <h3>${title}</h3>
+                                <p>${desc}${desc ? '...' : ''}</p>
+                                <div class="stats"><span>${date}</span></div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="${url}" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error('Failed to load articles', err);
+                container.innerHTML = '<div class="empty">فشل تحميل البيانات من الخادم</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadArticles);
+    </script>
+</body>
+</html>
